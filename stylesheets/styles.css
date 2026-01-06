@@ -1,0 +1,30 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  grid-template-rows: 1fr;
+  height: inherit;
+}
+
+.game_board {
+  display: grid;
+  gap: 4px;
+  grid-template-columns: 1fr 1fr 1fr;
+  place-items: center;
+  text-align: center;
+}
+
+.cell {
+  border: 1px solid black;
+  height: 20px;
+  width: 40px;
+}

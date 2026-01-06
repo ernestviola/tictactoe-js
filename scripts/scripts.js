@@ -29,7 +29,7 @@ function boardController() {
 
   const checkBoardState = () => {
     // check if no more moves are possible so all cells have a value
-    // check if the winning condition is found if so then return the winner token
+    // check if the winning condition is found if so then return true for the last player
     return {
       full: isBoardFull(gameBoard),
       winner: hasWinner()
@@ -133,30 +133,55 @@ function playerController() {
 
   const newPlayer = (name, symbol) => {
     // check to see if name or symbol already exists if it does then redo
-    let wins = 0;
-    const increaseScore = () => wins++;
+    wins = 0;
+
     if (players.find(player => player.name == name)) {
       throw Error('Name is already in use');
     } else if ((players.find(player => player.symbol == symbol))) {
       throw Error('Symbol is already in use');
     }
-    players.push(
-      {
+
+    const changeName = (name) => {
+      name = name;
+    }
+
+    const increaseScore = () => {
+      wins++;
+      return wins;
+    }
+
+    const getWins = () => {
+      return wins
+    }
+
+    const player = {
         name,
         symbol,
         wins,
-        increaseScore
+        getWins,
+        increaseScore,
+        changeName
       }
+
+    players.push(
+      player
     );
+
+    return player;
   }
 
   const getCurrentPlayer = () => players[currentPlayer];
-
+  const getAllPlayers = () => players;
   const nextPlayer = () => {
     currentPlayer = (currentPlayer + 1) % players.length;
   }
 
-  return { newPlayer, getCurrentPlayer, nextPlayer };
+  return { 
+    newPlayer, 
+    nextPlayer,
+    getCurrentPlayer, 
+    getAllPlayers,
+  };
 }
 
 
@@ -167,38 +192,92 @@ function gameController() {
 
   const startGame = () => {
     // create the board
+    winner = null;
     board = boardController();
-    board.printBoard();
   }
 
   const playRound = (row, column) => {
     if (board.checkBoardState().full) {
       console.log('Unable to continue. Start a new game.');
+      return;
     }
     if(winner) {
-      console.log('Play a new game current winner is:', winner.name)
+      console.log('Can not continue as a winner has been found:', winner.name)
+      return;
     }
     if (board.playerTurn(row, column, players.getCurrentPlayer())) {
-      board.printBoard();
       const currentBoardState = board.checkBoardState();
 
-      if (currentBoardState.full) {
-        console.log('Unable to continue. Start a new game.');
-      } else if (currentBoardState.winner) {
+      if (currentBoardState.winner) {
         winner = players.getCurrentPlayer();
-        winner.increaseScore();
-        console.log('Play a new game current winner is:', winner.name);
-        console.log(`${winner.name} has a score of ${winner.wins}`);
+        console.log(winner.increaseScore())
+        console.log('Play a new game current winner is:', winner.name, 'with', winner.wins, 'wins.');
+      } else if (currentBoardState.full) {
+        console.log('Unable to continue. Start a new game.');
       } else {
         players.nextPlayer();
       }        
     }
   }
 
-  players.newPlayer('player 1', 'X');
-  players.newPlayer('player 2', 'O');
+  const getBoard = () => board ? board.getBoard() : null;
 
-  return { startGame,playRound }
+  const newPlayer = (name,symbol) => players.newPlayer(name,symbol);
+
+  return { newPlayer, startGame, getBoard, playRound }
 }
 
-const gc = gameController();
+const screenController = () => {
+  const gc = gameController();
+  const ui_board = document.querySelector('.game_board');
+  // set player names
+  // show a startgame button which starts the game
+  const player_1 = gc.newPlayer('Player 1', 'X');
+  const player_2 = gc.newPlayer('Player 2','O');
+
+  const takeTurn = (row,col) => {
+    gc.playRound(row,col);
+  }
+
+  const writeBoard = () => {
+    ui_board.replaceChildren();
+    const logic_board = gc.getBoard();
+
+    if (!logic_board) return;
+
+    for (let row = 0; row < logic_board.length; row++) {
+      const currentRow = logic_board[row];
+      for (let col = 0; col < currentRow.length; col++ ) {
+        const currentCell = document.createElement('div');
+        currentCell.innerText = logic_board[row][col];
+        currentCell.className = 'cell';
+        currentCell.dataset.row = row;
+        currentCell.dataset.col = col;
+
+        currentCell.addEventListener('click', () => {
+          // take a turn
+          takeTurn(currentCell.dataset.row, currentCell.dataset.col)
+          writeBoard();
+        })
+
+        ui_board.appendChild(currentCell);
+      }
+    }
+  }
+
+  const initializeStartGameButton = () => {
+    const new_game_button = document.querySelector('.new_game');
+    new_game_button.addEventListener('click', (e) => {
+      e.preventDefault;
+      gc.startGame();
+      writeBoard();
+    })
+  }
+
+  initializeStartGameButton();
+  
+
+  return {writeBoard, takeTurn};
+}
+
+const sc = screenController();
