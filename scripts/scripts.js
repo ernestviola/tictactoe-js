@@ -31,8 +31,8 @@ function boardController() {
     // check if no more moves are possible so all cells have a value
     // check if the winning condition is found if so then return true for the last player
     return {
-      full: isBoardFull(gameBoard),
-      winner: hasWinner()
+      isFull: isBoardFull(gameBoard),
+      hasWinner: hasWinner()
     }
 
     function isBoardFull(arr) {
@@ -127,49 +127,49 @@ function boardController() {
   return { getBoard, printBoard, playerTurn, checkBoardState };
 }
 
+const makePlayer = (name, symbol) => {
+  // check to see if name or symbol already exists if it does then redo
+  wins = 0;
+  name = name;
+  symbol = symbol;
+
+  const changeName = (name) => {
+    name = name;
+  }
+
+  const increaseScore = () => {
+    wins++;
+    return wins;
+  }
+
+  const getWins = () => {
+    return wins
+  }
+
+  const player = {
+      name,
+      symbol,
+      wins,
+      getWins,
+      increaseScore,
+      changeName
+    }
+  return player;
+}
+
 function playerController() {
   const players = [];
   let currentPlayer = 0;
 
-  const newPlayer = (name, symbol) => {
-    // check to see if name or symbol already exists if it does then redo
-    wins = 0;
-
+  const newPlayer = (name,symbol) => {
+    const player = makePlayer(name,symbol);
     if (players.find(player => player.name == name)) {
       throw Error('Name is already in use');
     } else if ((players.find(player => player.symbol == symbol))) {
       throw Error('Symbol is already in use');
     }
-
-    const changeName = (name) => {
-      name = name;
-    }
-
-    const increaseScore = () => {
-      wins++;
-      return wins;
-    }
-
-    const getWins = () => {
-      return wins
-    }
-
-    const player = {
-        name,
-        symbol,
-        wins,
-        getWins,
-        increaseScore,
-        changeName
-      }
-
-    players.push(
-      player
-    );
-
-    return player;
+    players.push(player);
   }
-
   const getCurrentPlayer = () => players[currentPlayer];
   const getAllPlayers = () => players;
   const nextPlayer = () => {
@@ -208,11 +208,12 @@ function gameController() {
     if (board.playerTurn(row, column, players.getCurrentPlayer())) {
       const currentBoardState = board.checkBoardState();
 
-      if (currentBoardState.winner) {
+      if (currentBoardState.hasWinner) {
         winner = players.getCurrentPlayer();
+
         console.log(winner.increaseScore())
         console.log('Play a new game current winner is:', winner.name, 'with', winner.wins, 'wins.');
-      } else if (currentBoardState.full) {
+      } else if (currentBoardState.isFull) {
         console.log('Unable to continue. Start a new game.');
       } else {
         players.nextPlayer();
