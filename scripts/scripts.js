@@ -127,49 +127,49 @@ function boardController() {
   return { getBoard, printBoard, playerTurn, checkBoardState };
 }
 
-const makePlayer = (name, symbol) => {
-  // check to see if name or symbol already exists if it does then redo
-  wins = 0;
-  name = name;
-  symbol = symbol;
-
-  const changeName = (name) => {
-    name = name;
-  }
-
-  const increaseScore = () => {
-    wins++;
-    return wins;
-  }
-
-  const getWins = () => {
-    return wins
-  }
-
-  const player = {
-      name,
-      symbol,
-      wins,
-      getWins,
-      increaseScore,
-      changeName
-    }
-  return player;
-}
-
 function playerController() {
   const players = [];
   let currentPlayer = 0;
 
-  const newPlayer = (name,symbol) => {
-    const player = makePlayer(name,symbol);
+  const newPlayer = (name, symbol) => {
+    // check to see if name or symbol already exists if it does then redo
+    this.wins = 0;
+
     if (players.find(player => player.name == name)) {
       throw Error('Name is already in use');
     } else if ((players.find(player => player.symbol == symbol))) {
       throw Error('Symbol is already in use');
     }
-    players.push(player);
+
+    const changeName = (name) => {
+      this.name = name;
+    }
+
+    const increaseScore = () => {
+      this.wins++;
+      return this.wins;
+    }
+
+    const getWins = () => {
+      return wins
+    }
+
+    const player = {
+        name,
+        symbol,
+        wins,
+        getWins,
+        increaseScore,
+        changeName
+      }
+
+    players.push(
+      player
+    );
+
+    return player;
   }
+
   const getCurrentPlayer = () => players[currentPlayer];
   const getAllPlayers = () => players;
   const nextPlayer = () => {
@@ -212,7 +212,7 @@ function gameController() {
         winner = players.getCurrentPlayer();
 
         console.log(winner.increaseScore())
-        console.log('Play a new game current winner is:', winner.name, 'with', winner.wins, 'wins.');
+        console.log('Play a new game current winner is:', winner.name, 'with', winner.getWins(), 'wins.');
       } else if (currentBoardState.isFull) {
         console.log('Unable to continue. Start a new game.');
       } else {
