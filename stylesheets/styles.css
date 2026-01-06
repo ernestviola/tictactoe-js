@@ -2,10 +2,15 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 body {
   height: 100vh;
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 .container {
@@ -15,18 +20,51 @@ body {
   height: inherit;
 }
 
+.game_board_container {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game_board_container > h1 {
+  margin: 40px 0px 20px;
+  font-size: 3em;
+  text-align: center;
+}
+
 .game_board {
   display: grid;
   gap: 4px;
-  grid-template-columns: 1fr 1fr 1fr;
-  place-items: center;
+  grid-template-columns: 80px 80px 80px;
+  grid-template-rows: repeat(3, 80px);
   justify-content: center;
-  text-align: center;
+}
+
+.new_game_button {
+  margin: 10px;
+  background-color: rgb(112, 112, 174);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  height: 100px;
+  width: 200px;
+
+  font-size: 1.5em;
+}
+
+.new_game_button:hover {
+  background-color: rgb(57, 57, 148);
 }
 
 .cell {
   border: 1px solid black;
-  height: 1.5em;
-  width: 1.5em;
-  font-size: 1.5em;
+  font-size: 80px;
+  line-height: 0;
+  display: grid;
+  place-items: center;
+}
+
+.players_container {
+  background-color: rgb(25, 59, 25);
 }

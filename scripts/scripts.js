@@ -269,16 +269,22 @@ const screenController = () => {
     }
   }
 
-  const initializeStartGameButton = () => {
-    const new_game_button = document.querySelector('.new_game');
-    new_game_button.addEventListener('click', (e) => {
-      e.preventDefault;
+  const newGame = () => {
+    
       gc.startGame();
       writeBoard();
+  }
+
+  const initializeStartGameButton = () => {
+    const new_game_button = document.querySelector('.new_game_button');
+    new_game_button.addEventListener('click', (e) => {
+      e.preventDefault;
+      newGame();
     })
   }
 
   initializeStartGameButton();
+  newGame();
   
 
   return {writeBoard, takeTurn};
