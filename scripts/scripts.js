@@ -132,7 +132,7 @@ function playerController() {
   let currentPlayer = 0;
 
   const getPlayerByUUID = (uuid) => {
-    return players.find(player => player.uuid = uuid);
+    return players.find(player => player.uuid == uuid);
   }
 
   const checkPlayerConstrains = (name)  => {
@@ -295,6 +295,14 @@ const screenController = () => {
       const playerSymbol = document.createElement('span');
       playerElement.dataset.uuid = iteratedPlayer.uuid;
       playerName.innerText = iteratedPlayer.getName();
+      playerName.contentEditable = true;
+
+      playerName.addEventListener('input', (e) => {
+        console.log(e.target.innerText);
+        const uuid = e.target.parentNode.getAttribute('data-uuid');
+        gc.getPlayersController().getPlayerByUUID(uuid).setName(e.target.innerText);
+      })
+
       playerWins.innerText = iteratedPlayer.getWins();
       playerSymbol.innerText = iteratedPlayer.getSymbol();
 

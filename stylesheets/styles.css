@@ -73,6 +73,7 @@ button:hover {
 
 .players_container {
   background-color: rgb(25, 59, 25);
+  padding: 20px;
 }
 
 label {
@@ -84,13 +85,15 @@ label {
 }
 
 .new_player > input {
-  padding: 8px 4px;
   font-size: 1em;
+  padding: 0 2px;
 }
 
 .new_player > button {
-  font-size: 2em;
+  padding: 2px;
+  font-size: 1.5em;
   display: flex;
+  align-items: center;
 }
 
 .new_player > #name {
@@ -100,4 +103,13 @@ label {
 .new_player > #symbol {
   flex: 0 0 25px;
   width: 10px;
+}
+
+.players_list > div, .players_list_headers  {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+.players_list_headers {
+  font-weight: 600;
 }
