@@ -22,7 +22,7 @@ function boardController() {
     if (gameBoard[row][column]) {
       return false;
     } else {
-      gameBoard[row][column] = player.symbol;
+      gameBoard[row][column] = player.getSymbol();
       return true;
     }
   }
@@ -133,34 +133,37 @@ function playerController() {
 
   const newPlayer = (name, symbol) => {
     // check to see if name or symbol already exists if it does then redo
-    this.wins = 0;
+    let wins = 0;
+    let playerName = name;
+    let playerSymbol = symbol;
 
-    if (players.find(player => player.name == name)) {
+    if (players.find(player => player && player.getSymbol() == name)) {
       throw Error('Name is already in use');
-    } else if ((players.find(player => player.symbol == symbol))) {
+    } else if ((players.find(player => player && player.getSymbol() == symbol))) {
       throw Error('Symbol is already in use');
     }
 
-    const changeName = (name) => {
-      this.name = name;
+    const getName = () => playerName;
+    const setName = (name) => {
+      name = name;
     }
-
+    const getSymbol = () => playerSymbol;
     const increaseScore = () => {
-      this.wins++;
-      return this.wins;
+      wins++;
+      return wins;
     }
 
     const getWins = () => {
-      return wins
+      return wins;
     }
 
     const player = {
-        name,
-        symbol,
-        wins,
-        getWins,
+        getName,
+        setName,
+        getSymbol,
         increaseScore,
-        changeName
+        getWins,
+        setName
       }
 
     players.push(
@@ -212,7 +215,7 @@ function gameController() {
         winner = players.getCurrentPlayer();
 
         console.log(winner.increaseScore())
-        console.log('Play a new game current winner is:', winner.name, 'with', winner.getWins(), 'wins.');
+        console.log('Play a new game current winner is:', winner.getName(), 'with', winner.getWins(), 'wins.');
       } else if (currentBoardState.isFull) {
         console.log('Unable to continue. Start a new game.');
       } else {
