@@ -28,14 +28,14 @@ button:hover {
 }
 
 .game_board_container > h1 {
-  margin-top: 30%;
+  margin-top: 80px;
   font-size: 3em;
   text-align: center;
 }
 
 .game_info {
   font-size: 2em;
-  margin: 20px 0;
+  margin: 20px;
 }
 
 .game_board {
