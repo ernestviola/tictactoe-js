@@ -12,12 +12,12 @@
       <div class='players_container'>
         <div class='players_list'>
         </div>
-        <form action=''>
-          <label for='name'>Name</label>
-          <input type='text' placeholder='Name' id='name'>
-          <label for='symbol'>Symbol</label>
-          <input type='text' placeholder='X' id='symbol'>
-          <button class='new_player'>New Player</button>
+        <form action='' class='new_player'>
+          <label for='name' hidden>Name</label>
+          <input type='text' placeholder='Name' id='name' name='name' aria-label='Name'>
+          <label for='symbol' hidden>Symbol</label>
+          <input type='text' placeholder='X' id='symbol' name='symbol' aria-label='Symbol' maxlength='1'>
+          <button class='new_player'>+</button>
         </form>
       </div>
       <div class='game_board_container'>

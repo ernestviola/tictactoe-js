@@ -73,3 +73,30 @@ button:hover {
 .players_container {
   background-color: rgb(25, 59, 25);
 }
+
+label {
+  text-indent:-999px;
+}
+
+.new_player {
+  display: flex;
+}
+
+.new_player > input {
+  padding: 8px 4px;
+  font-size: 1em;
+}
+
+.new_player > button {
+  font-size: 2em;
+  display: flex;
+}
+
+.new_player > #name {
+  flex: 0 0 200px;
+}
+
+.new_player > #symbol {
+  flex: 0 0 25px;
+  width: 10px;
+}

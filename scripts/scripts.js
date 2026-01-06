@@ -261,17 +261,17 @@ const screenController = () => {
   const player_1 = gc.newPlayer('Player 1', 'X');
   const player_2 = gc.newPlayer('Player 2','O');
 
-  const writeBoardInfo = () => {
+  const displayBoardInfo = () => {
     const gameInfoContainer = document.querySelector('.game_info');
     gameInfoContainer.innerText = gc.getGameInfo();
   }
 
   const takeTurn = (row,col) => {
     gc.playRound(row,col);
-    writeBoardInfo();
+    displayBoardInfo();
   }
 
-  const writeBoard = () => {
+  const displayBoard = () => {
     ui_board.replaceChildren();
     const logic_board = gc.getBoard();
 
@@ -289,7 +289,7 @@ const screenController = () => {
         currentCell.addEventListener('click', () => {
           // take a turn
           takeTurn(currentCell.dataset.row, currentCell.dataset.col)
-          writeBoard();
+          displayBoard();
         })
 
         ui_board.appendChild(currentCell);
@@ -299,8 +299,8 @@ const screenController = () => {
 
   const newGame = () => {
       gc.startGame();
-      writeBoard();
-      writeBoardInfo();
+      displayBoard();
+      displayBoardInfo();
   }
 
   const initializeStartGameButton = () => {
@@ -315,7 +315,7 @@ const screenController = () => {
   newGame();
   
 
-  return {writeBoard, takeTurn};
+  return {displayBoard, takeTurn};
 }
 
 const sc = screenController();
