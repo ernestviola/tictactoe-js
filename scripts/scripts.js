@@ -135,11 +135,9 @@ function playerController() {
     return players.find(player => player.uuid = uuid);
   }
 
-  const checkPlayerConstrains = (name,symbol)  => {
+  const checkPlayerConstrains = (name)  => {
     if (players.find(player => player && player.getName() == name)) {
       throw Error('Name is already in use');
-    } else if ((players.find(player => player && player.getSymbol() == symbol))) {
-      throw Error('Symbol is already in use');
     }
   }
 
@@ -150,11 +148,11 @@ function playerController() {
     let playerSymbol = symbol;
     const uuid = crypto.randomUUID();
 
-    checkPlayerConstrains(name,symbol);
+    checkPlayerConstrains(name);
 
     const getName = () => playerName;
     const setName = (name) => {
-      checkPlayerConstrains();
+      checkPlayerConstrains(name);
       playerName = name;
     }
     const getSymbol = () => playerSymbol;
@@ -171,6 +169,13 @@ function playerController() {
       return wins;
     }
 
+    const getNextPlayer = () => {
+      const currPlayerIndex = players.findIndex( player => {
+        return player.uuid == uuid;
+      });
+      return players[(currPlayerIndex + 1) % players.length];
+    }
+
     const player = {
         uuid,
         getName,
@@ -178,7 +183,8 @@ function playerController() {
         getSymbol,
         setSymbol,
         increaseScore,
-        getWins
+        getWins,
+        getNextPlayer
       }
 
     players.push(
@@ -210,6 +216,8 @@ function gameController() {
   let winner = null;
   let gameInfo = null;
   const players = playerController();
+
+  const getPlayersController = () => players;
 
   const startGame = () => {
     // create the board
@@ -250,7 +258,14 @@ function gameController() {
 
   const newPlayer = (name,symbol) => players.newPlayer(name,symbol);
 
-  return { newPlayer, startGame, getBoard, getGameInfo, playRound }
+  return { 
+    newPlayer,
+    getPlayersController,
+    startGame, 
+    getBoard, 
+    getGameInfo, 
+    playRound
+  }
 }
 
 const screenController = () => {
@@ -258,8 +273,40 @@ const screenController = () => {
   const ui_board = document.querySelector('.game_board');
   // set player names
   // show a startgame button which starts the game
-  const player_1 = gc.newPlayer('Player 1', 'X');
-  const player_2 = gc.newPlayer('Player 2','O');
+  gc.newPlayer('Player 1', 'X');
+  gc.newPlayer('Player 2','O');
+
+  const displayPlayers = () => {
+    // display character name
+    // display character wins
+    // make character name editable -> saved on enter or click out of
+    const playersList = document.querySelector('.players_list')
+    playersList.replaceChildren();
+
+    const playersController = gc.getPlayersController();
+    // create the players from currentPlayer to currentPlayer - 1;
+    const currPlayer = playersController.getCurrentPlayer();
+    let iteratedPlayer = currPlayer;
+    do {
+      
+      const playerElement = document.createElement('div');
+      const playerName = document.createElement('span');
+      const playerWins = document.createElement('span');
+      const playerSymbol = document.createElement('span');
+      playerElement.dataset.uuid = iteratedPlayer.uuid;
+      playerName.innerText = iteratedPlayer.getName();
+      playerWins.innerText = iteratedPlayer.getWins();
+      playerSymbol.innerText = iteratedPlayer.getSymbol();
+
+      playerElement.appendChild(playerName);
+      playerElement.appendChild(playerWins);
+      playerElement.appendChild(playerSymbol);
+
+      playersList.append(playerElement);
+
+      iteratedPlayer = iteratedPlayer.getNextPlayer();
+    } while (currPlayer !== iteratedPlayer)
+  }
 
   const displayBoardInfo = () => {
     const gameInfoContainer = document.querySelector('.game_info');
@@ -269,6 +316,7 @@ const screenController = () => {
   const takeTurn = (row,col) => {
     gc.playRound(row,col);
     displayBoardInfo();
+    displayPlayers();
   }
 
   const displayBoard = () => {
@@ -301,6 +349,7 @@ const screenController = () => {
       gc.startGame();
       displayBoard();
       displayBoardInfo();
+      displayPlayers();
   }
 
   const initializeStartGameButton = () => {

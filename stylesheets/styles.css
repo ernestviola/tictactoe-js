@@ -63,6 +63,7 @@ button:hover {
 }
 
 .cell {
+  cursor:pointer;
   border: 3px solid black;
   font-size: 80px;
   line-height: 0;
