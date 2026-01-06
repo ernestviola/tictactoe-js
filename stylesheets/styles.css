@@ -28,9 +28,14 @@ button:hover {
 }
 
 .game_board_container > h1 {
-  margin: 40px 0px 20px;
+  margin-top: 30%;
   font-size: 3em;
   text-align: center;
+}
+
+.game_info {
+  font-size: 2em;
+  margin: 20px 0;
 }
 
 .game_board {
@@ -42,7 +47,7 @@ button:hover {
 }
 
 .new_game_button {
-  margin: 10px;
+  margin-top: 15px;
   background-color: rgb(112, 112, 174);
   border: none;
   border-radius: 50%;
@@ -58,7 +63,7 @@ button:hover {
 }
 
 .cell {
-  border: 1px solid black;
+  border: 3px solid black;
   font-size: 80px;
   line-height: 0;
   display: grid;

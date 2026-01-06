@@ -15,3 +15,4 @@ We'll be using closures and private variables in order to complete the project
 2. Remove the error for having the same symbol
 3. Add a UUID to the player so we can find the players easier when modifying
 their names
+4. Display the next action. Players turn -> Who won.
