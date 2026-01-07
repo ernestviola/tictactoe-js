@@ -22,7 +22,11 @@ function boardController() {
     if (gameBoard[row][column]) {
       return false;
     } else {
-      gameBoard[row][column] = player.getSymbol();
+      gameBoard[row][column] = {
+        symbol: player.getSymbol(),
+        uuid: player.uuid
+      }
+      ;
       return true;
     }
   }
@@ -50,8 +54,8 @@ function boardController() {
           // if first index of current row is empty then not a row win
           continue;
         }
-        const currentSymbol = currentRow[i];
-        if (currentRow.every(e => e === currentSymbol)) {
+        const currentSymbol = currentRow[i] ? currentRow[i].symbol : null;
+        if (currentRow.every(e => e && e.symbol === currentSymbol)) {
           console.log('Row Win');
           return true;
         }
@@ -66,11 +70,11 @@ function boardController() {
         for (let c = 0; c < columns; c++) {
           
           if (c == 0 && gameBoard[0][r]) {
-            currentSymbol = gameBoard[0][r];
+            currentSymbol = gameBoard[0][r] ? gameBoard[0][r].symbol : null;
           }
           if (!currentSymbol) break;
 
-          if (currentSymbol == gameBoard[c][r]) {
+          if (gameBoard[c][r] && currentSymbol == gameBoard[c][r].symbol) {
             columnWin = true;
           } else {
             columnWin = false;
@@ -91,9 +95,9 @@ function boardController() {
           let isWinner = false;
           let currRow = 0;
           let currCol = 0;
-          const currentSymbol = gameBoard[currRow][currCol];
+          const currentSymbol = gameBoard[currRow][currCol] ? gameBoard[currRow][currCol].symbol : null;
           while (currRow < rows && currCol < columns) {
-            if (currentSymbol && gameBoard[currRow][currCol] === currentSymbol) {
+            if (currentSymbol && gameBoard[currRow][currCol] && gameBoard[currRow][currCol].symbol === currentSymbol) {
               isWinner = true;
             } else {
               return false;
@@ -107,9 +111,9 @@ function boardController() {
           let isWinner = false;
           let currRow = 0;
           let currCol = columns-1;
-          const currentSymbol = gameBoard[currRow][currCol];
+          const currentSymbol = gameBoard[currRow][currCol] ? gameBoard[currRow][currCol].symbol : null;
           while (currRow < rows && currCol >=0) {
-            if (currentSymbol && gameBoard[currRow][currCol] === currentSymbol) {
+            if (currentSymbol && gameBoard[currRow][currCol] && gameBoard[currRow][currCol].symbol === currentSymbol) {
               isWinner = true;
             } else {
               return false;
@@ -276,6 +280,14 @@ const screenController = () => {
   gc.newPlayer('Player 1', 'X');
   gc.newPlayer('Player 2','O');
 
+  const colorFromUUID = (uuid) => {
+    const hexString = uuid.replace(/-/g, '')
+    const uuidBigInt = BigInt(`0x${hexString}`);
+    const result = uuidBigInt % BigInt(360);
+    let hue = Number(result);
+    return `hsl(${hue},50%, 20%)`;
+  }
+
   const displayPlayers = () => {
     // display character name
     // display character wins
@@ -305,6 +317,10 @@ const screenController = () => {
 
       playerWins.innerText = iteratedPlayer.getWins();
       playerSymbol.innerText = iteratedPlayer.getSymbol();
+      console.log(colorFromUUID(iteratedPlayer.uuid))
+
+      playerElement.style.backgroundColor = colorFromUUID(iteratedPlayer.uuid);
+      playerElement.className = 'player';
 
       playerElement.appendChild(playerName);
       playerElement.appendChild(playerWins);
@@ -337,7 +353,10 @@ const screenController = () => {
       const currentRow = logic_board[row];
       for (let col = 0; col < currentRow.length; col++ ) {
         const currentCell = document.createElement('div');
-        currentCell.innerText = logic_board[row][col];
+        currentCell.innerText = logic_board[row][col] ? logic_board[row][col].symbol : null;
+        currentCell.style.color = logic_board[row][col] ? 
+                        colorFromUUID(logic_board[row][col].uuid) :
+                        '';
         currentCell.className = 'cell';
         currentCell.dataset.row = row;
         currentCell.dataset.col = col;
