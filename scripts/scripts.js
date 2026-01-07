@@ -247,6 +247,7 @@ function gameController() {
         winner.increaseScore()
         gameInfo = `Winner is ${winner.getName()}!`
         console.log('Play a new game current winner is:', winner.getName(), 'with', winner.getWins(), 'wins.');
+        players.nextPlayer();
       } else if (currentBoardState.isFull) {
         console.log('Unable to continue. Start a new game.');
         gameInfo = `It's a tie!`

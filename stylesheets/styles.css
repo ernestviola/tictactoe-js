@@ -7,6 +7,7 @@
 
 body {
   height: 100vh;
+  background-color: rgb(231, 225, 225);
 }
 
 button:hover {
@@ -63,12 +64,16 @@ button:hover {
 }
 
 .cell {
+  background-color: white;
   cursor:pointer;
-  border: 3px solid black;
+  /* border: 3px solid black; */
   font-size: 80px;
   line-height: 0;
   display: grid;
   place-items: center;
+}
+.cell:hover {
+  background-color: rgb(94, 92, 92);
 }
 
 .players_container {
