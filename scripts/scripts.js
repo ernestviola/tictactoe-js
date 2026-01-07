@@ -310,14 +310,12 @@ const screenController = () => {
       playerName.contentEditable = true;
 
       playerName.addEventListener('input', (e) => {
-        console.log(e.target.innerText);
         const uuid = e.target.parentNode.getAttribute('data-uuid');
         gc.getPlayersController().getPlayerByUUID(uuid).setName(e.target.innerText);
       })
 
       playerWins.innerText = iteratedPlayer.getWins();
       playerSymbol.innerText = iteratedPlayer.getSymbol();
-      console.log(colorFromUUID(iteratedPlayer.uuid))
 
       playerElement.style.backgroundColor = colorFromUUID(iteratedPlayer.uuid);
       playerElement.className = 'player';
@@ -380,18 +378,31 @@ const screenController = () => {
   }
 
   const initializeStartGameButton = () => {
-    const new_game_button = document.querySelector('.new_game_button');
-    new_game_button.addEventListener('click', (e) => {
+    const newPlayerButton = document.querySelector('.new_game_button');
+    newPlayerButton.addEventListener('click', (e) => {
       e.preventDefault;
       newGame();
     })
   }
 
-  initializeStartGameButton();
-  newGame();
-  
+  const initializeNewPlayerButton = () => {
+    const newPlayerForm =  document.querySelector('.new_player');
+    newPlayerForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const name = formData.get('name');
+      const symbol = formData.get('symbol');
+      gc.newPlayer(name,symbol);
+      displayBoard();
+      displayBoardInfo();
+      displayPlayers();
+      e.target.reset();
+    })
+  }
 
-  return {displayBoard, takeTurn};
+  initializeStartGameButton();
+  initializeNewPlayerButton();
+  newGame();
 }
 
 const sc = screenController();

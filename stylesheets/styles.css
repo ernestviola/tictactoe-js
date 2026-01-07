@@ -74,6 +74,7 @@ button:hover {
 .players_container {
   border: 2px solid black;
   padding: 20px;
+  background-color: rgb(22, 44, 22);
 }
 
 label {
@@ -82,6 +83,7 @@ label {
 
 .new_player {
   display: flex;
+  margin-top: 10px;
 }
 
 .new_player > input {
@@ -94,6 +96,12 @@ label {
   font-size: 1.5em;
   display: flex;
   align-items: center;
+  background-color: rgb(112, 112, 174);
+  border: none;
+}
+
+.new_player > button:hover {
+  background-color: rgb(57, 57, 148);
 }
 
 .new_player > #name {
@@ -112,10 +120,13 @@ label {
 
 .players_list_headers {
   font-weight: 600;
+  color: white;
+  margin-bottom: 10px;
 }
 
 .player {
   color: white;
   margin: 2px 0px;
   padding: 4px 8px;
+  border: 2px solid white;
 }
